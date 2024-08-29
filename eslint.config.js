@@ -23,12 +23,12 @@ export default tseslint.config(
     },
     languageOptions: {
       parser: tseslint.parser,
-      parserOptions: {
-        projectService: {
-          allowDefaultProject: ['*.js', '*.ts'],
-        },
-        tsconfigRootDir: import.meta.dirname,
-      },
+      // parserOptions: {
+      //   projectService: {
+      //     // allowDefaultProject: ['*.js'],
+      //   },
+      //   tsconfigRootDir: import.meta.dirname,
+      // },
     },
   },
 )

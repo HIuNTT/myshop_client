@@ -1,22 +1,42 @@
-import { NextUIPluginConfig, ThemeColors } from '@nextui-org/react'
+import { LayoutTheme, NextUIPluginConfig, ThemeColors } from '@nextui-org/react'
 
 export const colors: Partial<ThemeColors> = {
   primary: {
-    50: '#FEE7EF',
-    100: '#FDD0DF',
-    200: '#FAA0BF',
-    300: '#F871A0',
-    400: '#F54180',
-    500: '#F31260',
-    600: '#C20E4D',
-    700: '#920B3A',
-    800: '#610726',
-    900: '#310413',
-    DEFAULT: '#F54180',
+    100: '#FCDED1',
+    200: '#FAB7A5',
+    300: '#F18576',
+    400: '#E35652',
+    500: '#D1202B',
+    600: '#B3172F',
+    700: '#961030',
+    800: '#790A2E',
+    900: '#64062D',
+    DEFAULT: '#D1202B',
+  },
+  secondary: {
+    100: '#8CBEF0',
+    200: '#81B8EF',
+    300: '#74B1ED',
+    400: '#66A9EB',
+    500: '#57A0E9',
+    600: '#4696E7',
+    700: '#348CE5',
+    800: '#2081E2',
+    900: '#1D75CD',
+    DEFAULT: '#4696E7',
+  },
+}
+
+const layout: Partial<LayoutTheme> = {
+  radius: {
+    small: '2px',
+    medium: '4px',
+    large: '8px',
   },
 }
 
 export const theme: NextUIPluginConfig = {
+  layout,
   themes: {
     light: {
       colors,

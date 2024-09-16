@@ -1,11 +1,16 @@
-import { NonIndexRouteObject, useRoutes } from 'react-router-dom'
+import { NonIndexRouteObject, useLocation, useNavigate, useRoutes } from 'react-router-dom'
+import Cookies from 'js-cookie'
 import { RouteList } from './types'
 import WrapperRoute from './config'
 import AdminLayout from 'components/layout/admin'
-import { lazy } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import HomeLayout from 'components/layout/home'
 import { ERole } from 'enums/role.enum'
 import AuthLayout from 'components/layout/AuthLayout'
+import { authRoute } from 'modules/auth/route'
+import { useUser } from 'store/user'
+import { useGetUserProfile } from 'modules/user/services/getUserProfile'
+import PageLoading from 'components/common/PageLoading'
 
 const NotFoundPage = lazy(() => import('modules/error/NotFound'))
 
@@ -18,19 +23,59 @@ function formatRoutes(routes: RouteList): NonIndexRouteObject[] {
 }
 
 export default function Routes() {
-  return useRoutes([
+  const [isLoading, setIsLoading] = useState(true)
+
+  const { token, setUserInfo, clearLogin } = useUser()
+
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+
+  const getUserProfile = useGetUserProfile(!!(token || Cookies.get(import.meta.env.VITE_REFRESH_TOKEN)))
+
+  useEffect(() => {
+    if (getUserProfile.data) {
+      setUserInfo(getUserProfile.data)
+    }
+    if (getUserProfile.isError) {
+      clearLogin()
+    }
+  }, [getUserProfile.data, getUserProfile.isError, setUserInfo, clearLogin])
+
+  useEffect(() => {
+    if (token && pathname === '/login') {
+      navigate({ pathname: '/' }, { replace: true })
+    }
+  }, [token, navigate, pathname])
+
+  useEffect(() => {
+    if (getUserProfile.isSuccess || getUserProfile.isError || !token) {
+      setIsLoading(false)
+    }
+  }, [getUserProfile.isSuccess, getUserProfile.isError, token])
+
+  const element = useRoutes([
+    {
+      path: '/',
+      element: <HomeLayout />,
+    },
+    {
+      path: '/',
+      element: <AuthLayout />,
+      children: formatRoutes(authRoute),
+    },
     {
       path: '/admin',
       element: <WrapperRoute auth={true} roles={[ERole.ADMIN]} element={<AdminLayout />} />,
     },
-    { path: '/', element: <HomeLayout /> },
     {
       path: '*',
       element: <NotFoundPage />,
     },
-    {
-      path: '/login',
-      element: <AuthLayout />,
-    },
   ])
+
+  if (!isLoading) {
+    return element
+  }
+
+  return <PageLoading />
 }

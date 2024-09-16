@@ -5,7 +5,10 @@ export const MyInput = extendVariants(Input, {
     // <- modify/add variants
     variant: {
       bordered: {
+        label: ['text-foreground group-data-[invalid=true]:!text-[#f33a58]'],
+        input: ['placeholder:text-default-400'],
         inputWrapper: ['border-small', 'border-[#dddde3]', 'data-[hover=true]:border-[#dddde3]'],
+        errorMessage: ['text-[13px] text-[#f33a58]'],
       },
     },
     size: {
@@ -24,20 +27,13 @@ export const MyInput = extendVariants(Input, {
     },
     textSize: {
       base: {
-        input: ['text-base', 'leading-5'],
+        input: ['text-sm', 'leading-5'],
       },
-    },
-    removeLabel: {
-      true: {
-        label: 'hidden',
-      },
-      false: {},
     },
   },
   defaultVariants: {
     color: 'secondary',
     textSize: 'base',
-    removeLabel: true,
     variant: 'bordered',
   },
 })

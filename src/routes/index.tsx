@@ -11,13 +11,14 @@ import { authRoute } from 'modules/auth/route'
 import { useUser } from 'store/user'
 import { useGetUserProfile } from 'modules/user/services/getUserProfile'
 import PageLoading from 'components/common/PageLoading'
+import { adminRoute } from 'modules/admin/route'
 
 const NotFoundPage = lazy(() => import('modules/error/NotFound'))
 
 function formatRoutes(routes: RouteList): NonIndexRouteObject[] {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return routes.map(({ auth, roles, icon, name, children, ...rest }) => {
-    rest.element = <WrapperRoute element={rest.element} auth={auth} roles={roles} />
+    if (rest.element) rest.element = <WrapperRoute element={rest.element} auth={auth} roles={roles} />
     return { ...rest, children: children ? formatRoutes(children) : [] }
   })
 }
@@ -66,6 +67,7 @@ export default function Routes() {
     {
       path: '/admin',
       element: <WrapperRoute auth={true} roles={[ERole.ADMIN]} element={<AdminLayout />} />,
+      children: formatRoutes(adminRoute),
     },
     {
       path: '*',

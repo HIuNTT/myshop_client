@@ -6,7 +6,7 @@ import { refreshToken } from 'modules/auth/services/refreshToken'
 import { toast } from 'sonner'
 import { useUser } from 'store/user'
 
-const UNKNOWN_ERROR = 'Lỗi không xác định, vui lòng thử lại'
+export const UNKNOWN_ERROR = 'Lỗi không xác định, vui lòng thử lại'
 
 export type BaseResponse<T = any> = {
   statusCode: number

@@ -19,9 +19,20 @@ export default function SubMenu({ eventKey, children, title, style = {}, level =
 
   const childrenSelected = selectedKeys.some((key) => key.includes(eventKey))
 
-  const indentStyle: CSSProperties = {
-    paddingLeft: `${level * inlineIndent}px`,
-  }
+  const indentStyle: CSSProperties =
+    mode === 'inline'
+      ? {
+          paddingLeft: `${level * inlineIndent}px`,
+        }
+      : {}
+
+  const paddingInlineStyle: CSSProperties =
+    level === 1 && mode !== 'inline'
+      ? {
+          paddingInline: 'calc(50% - 12px)',
+          transition: 'padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)',
+        }
+      : {}
 
   const transitionStyle: CSSProperties = {
     transition: 'color 1s , background-color 0.3s cubic-bezier(0.65, 0.05, 0.36, 1)',
@@ -35,16 +46,22 @@ export default function SubMenu({ eventKey, children, title, style = {}, level =
 
   const titleNode: ReactElement = (
     <div
-      style={{ ...style, ...indentStyle, ...transitionStyle }}
+      style={{ ...style, ...indentStyle, ...transitionStyle, ...paddingInlineStyle }}
       className={cn(
-        'relative m-1 flex h-10 cursor-pointer items-center overflow-hidden overflow-ellipsis pr-[34px] leading-10 hover:rounded-large',
+        'relative m-1 flex h-10 cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap pr-[34px] leading-10 hover:rounded-large',
         'hover:bg-black/[.06]',
         childrenSelected && 'text-secondary hover:text-foreground',
       )}
       onClick={onInternalTitleClick}
     >
       {title}
-      <Icon className={cn('absolute right-4', { 'rotate-180 transform': originOpen })} icon="bxs:chevron-down" />
+      <Icon
+        className={cn('absolute right-4', {
+          'rotate-180 transform': originOpen,
+          hidden: level === 1 && mode !== 'inline',
+        })}
+        icon="bxs:chevron-down"
+      />
     </div>
   )
   return (

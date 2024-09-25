@@ -22,8 +22,12 @@ export default function Sider(props: SiderProps) {
   }
 
   return (
-    <aside className={cn('bg-background', className)} {...otherProps} style={divStyle}>
-      <div>{children}</div>
+    <aside
+      className={cn('bg-background transition-all duration-[.2s]', className)}
+      {...otherProps}
+      style={{ ...divStyle }}
+    >
+      <div className="h-full">{children}</div>
     </aside>
   )
 }
